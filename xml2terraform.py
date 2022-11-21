@@ -1,34 +1,15 @@
 import xmltodict
 import os
+import glob
 
 PANORAMA_CONFIG_FILENAME = "running-config.xml"
 
 
 def main():
-    def writeblock(rules, rulebase):
-        multiples = [
-            "category",
-            "service",
-            "from",
-            "to",
-            "destination",
-            "source",
-            "source-user",
-            "source-hip",
-            "application",
-        ]
-        for rule in rules:
-            for prop in multiples:
-                if isinstance(rule[prop]["member"], list):
-                    rule[prop]["member"] = '","'.join(rule[prop]["member"])
-            with open("main.tf", "a") as f:
-                dg_name = dg.get("@name", "shared")
-                f.write(policy_block(rule, dg_name, rulebase))
 
-    try:
-        os.remove("main.tf")
-    except OSError:
-        pass
+    fileList = glob.glob("*.tf")
+    for file in fileList:
+        os.remove(file) if os.path.exists(file) else None
 
     with open(PANORAMA_CONFIG_FILENAME) as f:
         doc = xmltodict.parse(f.read())
@@ -46,13 +27,17 @@ def main():
         device_groups += shared_dg
 
         for dg in device_groups:
+            # Get rules per rulebase
             for rulebase in ["pre-rulebase", "post-rulebase"]:
-                try:
-                    rules = dg[rulebase]["security"]["rules"]["entry"]
-                    rules = single_list(rules)
-                    writeblock(rules, rulebase)
-                except KeyError:
-                    pass
+                write_policy_block(dg, rulebase)
+
+            ###Get Addresses from DG
+            addresses = single_list(dg["address"]["entry"])
+            dg_name = dg.get("@name", "shared")
+            for address in addresses:
+                address["dg_name"] = dg_name
+                write_object_block(address)
+                pass
 
 
 def single_list(item):
@@ -61,10 +46,50 @@ def single_list(item):
     return item
 
 
-def policy_block(rule, dg, rb):
-    def name_parser(name: str):
-        return name.replace(" ", "_")
+def name_parser(name: str):
+    return name.replace(" ", "_")
 
+
+def write_policy_block(dg, rulebase):
+    try:
+        rules = dg[rulebase]["security"]["rules"]["entry"]
+    except KeyError:
+        return
+    rules = single_list(rules)
+    multiples = [
+        "category",
+        "service",
+        "from",
+        "to",
+        "destination",
+        "source",
+        "source-user",
+        "source-hip",
+        "application",
+    ]
+    for rule in rules:
+        for key in rule.keys():
+            if key in multiples:
+                rule[key]["member"] = parseMultiples(rule[key])
+
+        dg_name = dg.get("@name", "shared")
+        with open(f"security_policies_{dg_name}.tf", "a") as f:
+            f.write(policy_block(rule, dg_name, rulebase))
+
+
+def write_object_block(address):
+    with open(f"addresses.tf", "a") as f:
+        f.write(object_block(address))
+
+
+def parseMultiples(value):
+    if isinstance(value["member"], list):
+        return '","'.join(value["member"])
+    else:
+        return value
+
+
+def policy_block(rule, dg, rb):
     name = f"{dg}_{rb}_{rule['@name']}"
     name = name_parser(name)
     terraform_string = f"""
@@ -72,12 +97,10 @@ resource "panos_panorama_security_policy" "{name}" {{
     device_group = "{dg}"
     rulebase = "{rb}"
     rule {{
-        
         name = "{rule["@name"]}"
         source_zones = ["{rule["from"]["member"]}"]
         source_addresses = ["{rule["source"]["member"]}"]
         source_users = ["{rule["source-user"]["member"]}"]
-        #hip_profiles = ["{rule["source-hip"]["member"]}"]
         destination_zones = ["{rule["to"]["member"]}"]
         destination_addresses = ["{rule["destination"]["member"]}"]
         applications = ["{rule["application"]["member"]}"]
@@ -86,6 +109,25 @@ resource "panos_panorama_security_policy" "{name}" {{
         action = "{rule["action"]}"
         #uuid = "{rule["@uuid"]}"
     }}
+
+    lifecycle {{
+        create_before_destroy = true
+    }}
+}}
+"""
+    return terraform_string
+
+
+def object_block(address):
+    address_type = list(address.keys())[1]
+    terraform_string = f"""
+resource "panos_panorama_address_object" "{name_parser(address["@name"])}" {{
+
+    device_group = "{address["dg_name"]}"
+    name = "{address["@name"]}"
+    value = "{address[address_type]}"
+    type = "{address_type}"
+    #description = ""
 
     lifecycle {{
         create_before_destroy = true

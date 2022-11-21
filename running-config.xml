@@ -4,7 +4,7 @@
     <devices/>
     <users>
       <entry name="admin">
-        <phash>fnRL/G5lXVMug</phash>
+        <phash>$5$dxeasuqv$MPUHJ7uEpQkpWuNAsTi.OUAVa4lf/Fkx41bbgUR5HfD</phash>
         <permissions>
           <role-based>
             <superuser>yes</superuser>
@@ -21,93 +21,112 @@
     <pre-rulebase>
       <security>
         <rules>
-          <entry name="Test Shared" uuid="20d2dd9d-3c4c-4615-b2c2-b3259e9835ef">
-            <target>
-              <negate>no</negate>
-            </target>
-            <to>
-              <member>america</member>
-            </to>
+          <entry name="Test Shared-1" uuid="1ccc5af7-cae9-48bf-afd5-87e9f22af8ef">
+            <rule-type>universal</rule-type>
             <from>
               <member>america</member>
               <member>europe</member>
             </from>
+            <to>
+              <member>america</member>
+            </to>
             <source>
               <member>any</member>
             </source>
-            <destination>
-              <member>any</member>
-            </destination>
+            <negate-source>no</negate-source>
             <source-user>
               <member>any</member>
             </source-user>
-            <category>
-              <member>abused-drugs</member>
-              <member>business-and-economy</member>
-            </category>
+            <destination>
+              <member>any</member>
+            </destination>
+            <negate-destination>no</negate-destination>
             <application>
-              <member>1und1-mail</member>
-              <member>2ch</member>
               <member>ssl</member>
               <member>web-browsing</member>
+              <member>2ch</member>
+              <member>1und1-mail</member>
             </application>
             <service>
               <member>service-http</member>
               <member>service-https</member>
             </service>
-            <source-hip>
-              <member>any</member>
-            </source-hip>
-            <destination-hip>
-              <member>any</member>
-            </destination-hip>
+            <category>
+              <member>business-and-economy</member>
+              <member>abused-drugs</member>
+            </category>
             <action>drop</action>
+            <log-start>no</log-start>
+            <log-end>yes</log-end>
+            <disabled>no</disabled>
+            <icmp-unreachable>no</icmp-unreachable>
+            <option>
+              <disable-server-response-inspection>no</disable-server-response-inspection>
+            </option>
           </entry>
-          <entry name="Test Shared-1" uuid="e3b36053-73af-42e9-a217-42b6a0a8df51">
-            <target>
-              <negate>no</negate>
-            </target>
-            <to>
-              <member>america</member>
-            </to>
+          <entry name="Test Shared" uuid="f9285e1f-6b5b-493f-b50c-d7d2e11cb367">
+            <rule-type>universal</rule-type>
             <from>
               <member>america</member>
               <member>europe</member>
             </from>
+            <to>
+              <member>america</member>
+            </to>
             <source>
               <member>any</member>
             </source>
-            <destination>
-              <member>any</member>
-            </destination>
+            <negate-source>no</negate-source>
             <source-user>
               <member>any</member>
             </source-user>
-            <category>
-              <member>abused-drugs</member>
-              <member>business-and-economy</member>
-            </category>
+            <destination>
+              <member>any</member>
+            </destination>
+            <negate-destination>no</negate-destination>
             <application>
-              <member>1und1-mail</member>
-              <member>2ch</member>
               <member>ssl</member>
               <member>web-browsing</member>
+              <member>2ch</member>
+              <member>1und1-mail</member>
             </application>
             <service>
               <member>service-http</member>
               <member>service-https</member>
             </service>
-            <source-hip>
-              <member>any</member>
-            </source-hip>
-            <destination-hip>
-              <member>any</member>
-            </destination-hip>
+            <category>
+              <member>business-and-economy</member>
+              <member>abused-drugs</member>
+            </category>
             <action>drop</action>
+            <log-start>no</log-start>
+            <log-end>yes</log-end>
+            <disabled>no</disabled>
+            <icmp-unreachable>no</icmp-unreachable>
+            <option>
+              <disable-server-response-inspection>no</disable-server-response-inspection>
+            </option>
           </entry>
         </rules>
       </security>
     </pre-rulebase>
+    <address>
+      <entry name="address1">
+        <ip-netmask>1.1.1.1</ip-netmask>
+      </entry>
+    </address>
+    <address-group>
+      <entry name="address grouptest">
+        <static>
+          <member>address1</member>
+        </static>
+      </entry>
+      <entry name="address group test2">
+        <static>
+          <member>address grouptest</member>
+        </static>
+      </entry>
+    </address-group>
   </shared>
   <devices>
     <entry name="localhost.localdomain">
@@ -137,6 +156,7 @@
             <device-health-performance>yes</device-health-performance>
             <product-usage>yes</product-usage>
           </device-telemetry>
+          <hostname>Panorama</hostname>
         </system>
         <setting>
           <management>
@@ -153,204 +173,244 @@
           <pre-rulebase>
             <security>
               <rules>
-                <entry name="Test Shared-1-1" uuid="28937b7d-e8e4-4542-b6cd-0451c207c7b4">
-                  <target>
-                    <negate>no</negate>
-                  </target>
-                  <to>
-                    <member>america</member>
-                  </to>
+                <entry name="Test Shared-1-1" uuid="99813b61-5ca8-4f90-bee7-e678bc841e92">
+                  <rule-type>universal</rule-type>
                   <from>
                     <member>america</member>
                     <member>europe</member>
                   </from>
+                  <to>
+                    <member>america</member>
+                  </to>
                   <source>
                     <member>any</member>
                   </source>
-                  <destination>
-                    <member>any</member>
-                  </destination>
+                  <negate-source>no</negate-source>
                   <source-user>
                     <member>any</member>
                   </source-user>
-                  <category>
-                    <member>abused-drugs</member>
-                    <member>business-and-economy</member>
-                  </category>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <negate-destination>no</negate-destination>
                   <application>
-                    <member>1und1-mail</member>
-                    <member>2ch</member>
                     <member>ssl</member>
                     <member>web-browsing</member>
+                    <member>2ch</member>
+                    <member>1und1-mail</member>
                   </application>
                   <service>
                     <member>service-http</member>
                     <member>service-https</member>
                   </service>
-                  <source-hip>
-                    <member>any</member>
-                  </source-hip>
-                  <destination-hip>
-                    <member>any</member>
-                  </destination-hip>
+                  <category>
+                    <member>business-and-economy</member>
+                    <member>abused-drugs</member>
+                  </category>
                   <action>drop</action>
+                  <log-start>no</log-start>
+                  <log-end>yes</log-end>
+                  <disabled>no</disabled>
+                  <icmp-unreachable>no</icmp-unreachable>
+                  <option>
+                    <disable-server-response-inspection>no</disable-server-response-inspection>
+                  </option>
                 </entry>
               </rules>
             </security>
           </pre-rulebase>
+          <address>
+            <entry name="iprangetest">
+              <ip-range>10.0.0.1-10.0.0.4</ip-range>
+            </entry>
+          </address>
         </entry>
         <entry name="spain">
           <devices type="array"/>
           <pre-rulebase>
             <security>
               <rules>
-                <entry name="Test Shared-1-2" uuid="dee5158e-ce3b-45d9-a5d8-3ba6a127addf">
-                  <target>
-                    <negate>no</negate>
-                  </target>
-                  <to>
-                    <member>america</member>
-                  </to>
+                <entry name="Test Shared-1-2" uuid="02753770-3330-4a30-98b8-2629c03a958f">
+                  <rule-type>universal</rule-type>
                   <from>
                     <member>america</member>
                     <member>europe</member>
                   </from>
+                  <to>
+                    <member>america</member>
+                  </to>
                   <source>
                     <member>any</member>
                   </source>
-                  <destination>
-                    <member>any</member>
-                  </destination>
+                  <negate-source>no</negate-source>
                   <source-user>
                     <member>any</member>
                   </source-user>
-                  <category>
-                    <member>abused-drugs</member>
-                    <member>business-and-economy</member>
-                  </category>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <negate-destination>no</negate-destination>
                   <application>
-                    <member>1und1-mail</member>
-                    <member>2ch</member>
                     <member>ssl</member>
                     <member>web-browsing</member>
+                    <member>2ch</member>
+                    <member>1und1-mail</member>
                   </application>
                   <service>
                     <member>service-http</member>
                     <member>service-https</member>
                   </service>
-                  <source-hip>
-                    <member>any</member>
-                  </source-hip>
-                  <destination-hip>
-                    <member>any</member>
-                  </destination-hip>
+                  <category>
+                    <member>business-and-economy</member>
+                    <member>abused-drugs</member>
+                  </category>
                   <action>drop</action>
+                  <log-start>no</log-start>
+                  <log-end>yes</log-end>
+                  <disabled>no</disabled>
+                  <icmp-unreachable>no</icmp-unreachable>
+                  <option>
+                    <disable-server-response-inspection>no</disable-server-response-inspection>
+                  </option>
                 </entry>
               </rules>
             </security>
           </pre-rulebase>
+          <address>
+            <entry name="google.com">
+              <fqdn>google.com</fqdn>
+              <disable-override>no</disable-override>
+            </entry>
+          </address>
+          <address-group>
+            <entry name="address group spain">
+              <static>
+                <member>address1</member>
+                <member>google.com</member>
+                <member>iprangetest</member>
+              </static>
+            </entry>
+            <entry name="address group spain 2">
+              <static>
+                <member>address group spain</member>
+                <member>google.com</member>
+              </static>
+            </entry>
+          </address-group>
         </entry>
         <entry name="america">
           <devices/>
           <pre-rulebase>
             <security>
               <rules>
-                <entry name="Test Shared-1-1" uuid="80da6e25-d332-4912-9969-77696ea75233">
-                  <target>
-                    <negate>no</negate>
-                  </target>
-                  <to>
-                    <member>america</member>
-                  </to>
+                <entry name="Test Shared-1-1" uuid="d28775c3-e175-425b-b170-b5939b97605a">
+                  <rule-type>universal</rule-type>
                   <from>
                     <member>america</member>
                     <member>europe</member>
                   </from>
+                  <to>
+                    <member>america</member>
+                  </to>
                   <source>
                     <member>any</member>
                   </source>
-                  <destination>
-                    <member>any</member>
-                  </destination>
+                  <negate-source>no</negate-source>
                   <source-user>
                     <member>any</member>
                   </source-user>
-                  <category>
-                    <member>abused-drugs</member>
-                    <member>business-and-economy</member>
-                  </category>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <negate-destination>no</negate-destination>
                   <application>
-                    <member>1und1-mail</member>
-                    <member>2ch</member>
                     <member>ssl</member>
                     <member>web-browsing</member>
+                    <member>2ch</member>
+                    <member>1und1-mail</member>
                   </application>
                   <service>
                     <member>service-http</member>
                     <member>service-https</member>
                   </service>
-                  <source-hip>
-                    <member>any</member>
-                  </source-hip>
-                  <destination-hip>
-                    <member>any</member>
-                  </destination-hip>
+                  <category>
+                    <member>business-and-economy</member>
+                    <member>abused-drugs</member>
+                  </category>
                   <action>drop</action>
+                  <log-start>no</log-start>
+                  <log-end>yes</log-end>
+                  <disabled>no</disabled>
+                  <icmp-unreachable>no</icmp-unreachable>
+                  <option>
+                    <disable-server-response-inspection>no</disable-server-response-inspection>
+                  </option>
                 </entry>
               </rules>
             </security>
           </pre-rulebase>
+          <address>
+            <entry name="adress2">
+              <ip-netmask>2.2.2.2</ip-netmask>
+            </entry>
+          </address>
         </entry>
         <entry name="usa">
           <devices type="array"/>
           <pre-rulebase>
             <security>
               <rules>
-                <entry name="Test Shared-1-2" uuid="e799add6-b165-4ae7-9129-5d4b408810db">
-                  <target>
-                    <negate>no</negate>
-                  </target>
-                  <to>
-                    <member>america</member>
-                  </to>
+                <entry name="Test Shared-1-2" uuid="d4f1b253-502f-476b-887a-5378d84fc474">
+                  <rule-type>universal</rule-type>
                   <from>
                     <member>america</member>
                     <member>europe</member>
                   </from>
+                  <to>
+                    <member>america</member>
+                  </to>
                   <source>
                     <member>any</member>
                   </source>
-                  <destination>
-                    <member>any</member>
-                  </destination>
+                  <negate-source>no</negate-source>
                   <source-user>
                     <member>any</member>
                   </source-user>
-                  <category>
-                    <member>abused-drugs</member>
-                    <member>business-and-economy</member>
-                  </category>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <negate-destination>no</negate-destination>
                   <application>
-                    <member>1und1-mail</member>
-                    <member>2ch</member>
                     <member>ssl</member>
                     <member>web-browsing</member>
+                    <member>2ch</member>
+                    <member>1und1-mail</member>
                   </application>
                   <service>
                     <member>service-http</member>
                     <member>service-https</member>
                   </service>
-                  <source-hip>
-                    <member>any</member>
-                  </source-hip>
-                  <destination-hip>
-                    <member>any</member>
-                  </destination-hip>
+                  <category>
+                    <member>business-and-economy</member>
+                    <member>abused-drugs</member>
+                  </category>
                   <action>drop</action>
+                  <log-start>no</log-start>
+                  <log-end>yes</log-end>
+                  <disabled>no</disabled>
+                  <icmp-unreachable>no</icmp-unreachable>
+                  <option>
+                    <disable-server-response-inspection>no</disable-server-response-inspection>
+                  </option>
                 </entry>
               </rules>
             </security>
           </pre-rulebase>
+          <address>
+            <entry name="adress3">
+              <ip-netmask>4.4.4.4</ip-netmask>
+            </entry>
+          </address>
         </entry>
       </device-group>
     </entry>
@@ -365,6 +425,14 @@
           <entry name="spain">
             <parent-dg>europe</parent-dg>
             <id>12</id>
+            <address-group>
+              <entry name="address group spain">
+                <id>17</id>
+              </entry>
+              <entry name="address group spain 2">
+                <id>18</id>
+              </entry>
+            </address-group>
           </entry>
           <entry name="america">
             <id>13</id>
@@ -376,6 +444,16 @@
         </device-group>
       </entry>
     </devices>
-    <max-internal-id>14</max-internal-id>
+    <max-internal-id>18</max-internal-id>
+    <shared>
+      <address-group>
+        <entry name="address grouptest">
+          <id>15</id>
+        </entry>
+        <entry name="address group test2">
+          <id>16</id>
+        </entry>
+      </address-group>
+    </shared>
   </readonly>
 </config>
