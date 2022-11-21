@@ -14,3 +14,9 @@ Address objects (All types)
 # Pending:
 
 Address groups
+
+
+
+### About terraformer
+
+Ive seen that theres also this tool named terraformer (https://panos.pan.dev/docs/automation/terraformer_qs) that connect directly to the panorama/firewall to also do this kind of job, but it has let me down due to several limitations thats why im still working on tihis
