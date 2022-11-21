@@ -32,12 +32,20 @@ def main():
                 write_policy_block(dg, rulebase)
 
             ###Get Addresses from DG
-            addresses = single_list(dg["address"]["entry"])
-            dg_name = dg.get("@name", "shared")
+            addresses = dg.get("address", [])
+            if addresses:
+                addresses = single_list(addresses["entry"])
+                dg_name = dg.get("@name", "shared")
             for address in addresses:
                 address["dg_name"] = dg_name
                 write_object_block(address)
                 pass
+            # Get address groups
+            address_groups = dg.get("address-group", None)
+            if address_groups:
+                address_groups = address_groups["entry"]
+                for address_group in address_groups:
+                    pass
 
 
 def single_list(item):
@@ -54,6 +62,8 @@ def write_policy_block(dg, rulebase):
     try:
         rules = dg[rulebase]["security"]["rules"]["entry"]
     except KeyError:
+        return
+    except TypeError:
         return
     rules = single_list(rules)
     multiples = [
@@ -100,14 +110,24 @@ resource "panos_panorama_security_policy" "{name}" {{
         name = "{rule["@name"]}"
         source_zones = ["{rule["from"]["member"]}"]
         source_addresses = ["{rule["source"]["member"]}"]
-        source_users = ["{rule["source-user"]["member"]}"]
+        source_users = {smartGet(rule, "null",["source-user","member"])}
         destination_zones = ["{rule["to"]["member"]}"]
         destination_addresses = ["{rule["destination"]["member"]}"]
         applications = ["{rule["application"]["member"]}"]
         services = ["{rule["service"]["member"]}"]
-        categories = ["{rule["category"]["member"]}"]
+        categories = {smartGet(rule, "null",["category","member"])}
         action = "{rule["action"]}"
+        
+
+        description = "{rule.get("description","null")}"
+        negate_source = {"true" if rule.get("negate-source", False) else "false"}
+        negate_destination = {"true" if rule.get("negate-destination", False) else "false"}
+        log_setting = "{rule.get("log-setting", "null")}"
+        disabled = {"true" if rule.get("disabled", False) else "false"}
+        group = "{deepGet(rule,"null", ["profile-setting","group","member"])}"
+
         #uuid = "{rule["@uuid"]}"
+
     }}
 
     lifecycle {{
@@ -116,6 +136,24 @@ resource "panos_panorama_security_policy" "{name}" {{
 }}
 """
     return terraform_string
+
+
+def deepGet(t: dict, default, keys: list):
+    for key in keys:
+        result = t.get(key, default)
+        if result == default:
+            return default
+    return result
+
+
+def smartGet(t: dict, default: str, keys: list):
+    for key in keys:
+        result = t.get(key, default)
+        if result == default:
+            return default
+        else:
+            t = result
+    return f'["{t}"]'
 
 
 def object_block(address):
