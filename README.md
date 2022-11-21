@@ -1,4 +1,5 @@
 # PanosReverseTerraform
+Get Terraform files from  panorama configuration XML
 
 ## How to use
 
