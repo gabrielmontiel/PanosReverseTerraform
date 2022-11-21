@@ -6,14 +6,16 @@ Run xml2terraform.py in the same directory as a Panorama running-config.xml file
 
 Get main.tf with all the security Policies in the configuration in their respective Device Group and Rulebase
 
+## NOTE: 
+if you have dynamic object groups this program WONT work and WILL crash.
 ## Supports:
 
 Security Policies
 Address objects (All types)
-
+Address groups (statics)
 # Pending:
 
-Address groups
+Address groups (dynamic)
 
 
 

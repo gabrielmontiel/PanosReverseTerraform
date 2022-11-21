@@ -45,6 +45,7 @@ def main():
             if address_groups:
                 address_groups = address_groups["entry"]
                 for address_group in address_groups:
+                    write_group_object_block(address_group)
                     pass
 
 
@@ -90,6 +91,12 @@ def write_policy_block(dg, rulebase):
 def write_object_block(address):
     with open(f"addresses.tf", "a") as f:
         f.write(object_block(address))
+
+
+def write_group_object_block(group):
+    with open(f"address_groups.tf", "a") as f:
+        f.write(group_object_block(group))
+    pass
 
 
 def parseMultiples(value):
@@ -166,6 +173,30 @@ resource "panos_panorama_address_object" "{name_parser(address["@name"])}" {{
     value = "{address[address_type]}"
     type = "{address_type}"
     #description = ""
+
+    lifecycle {{
+        create_before_destroy = true
+    }}
+}}
+"""
+    return terraform_string
+
+
+def parse_group_members(members):
+    if isinstance(members, list):
+        string = str(members).replace("'", '"')
+    else:
+        string = f'["{members}"]'
+    return string
+
+
+def group_object_block(group):
+    terraform_string = f"""
+# Static group
+resource "panos_panorama_address_group" "example" {{
+    name = "{group["@name"]}"
+    description = null
+    static_addresses = {parse_group_members(group["static"]["member"])}
 
     lifecycle {{
         create_before_destroy = true
