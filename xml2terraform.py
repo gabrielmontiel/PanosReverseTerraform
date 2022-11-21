@@ -22,7 +22,8 @@ def main():
                 if isinstance(rule[prop]["member"], list):
                     rule[prop]["member"] = '","'.join(rule[prop]["member"])
             with open("main.tf", "a") as f:
-                f.write(policy_block(rule, dg["@name"], rulebase))
+                dg_name = dg.get("@name", "shared")
+                f.write(policy_block(rule, dg_name, rulebase))
 
     try:
         os.remove("main.tf")
@@ -31,22 +32,27 @@ def main():
 
     with open(PANORAMA_CONFIG_FILENAME) as f:
         doc = xmltodict.parse(f.read())
+        # Select device groups entries
         device_groups = doc["config"]["devices"]["entry"]["device-group"]["entry"]
+        # Create a list with a single element if theres only one device group
+        # To generalize the code
         device_groups = single_list(device_groups)
 
+        # Select Shared DG and create a single elem list
+        shared_dg = doc["config"]["shared"]
+        shared_dg = single_list(shared_dg)
+
+        # Append shared as a DG
+        device_groups += shared_dg
+
         for dg in device_groups:
-            try:
-                pre_rules = dg["pre-rulebase"]["security"]["rules"]["entry"]
-                pre_rules = single_list(pre_rules)
-                writeblock(pre_rules, "pre-rulebase")
-            except KeyError:
-                pass
-            try:
-                post_rules = dg["post-rulebase"]["security"]["rules"]["entry"]
-                post_rules = single_list(post_rules)
-                writeblock(post_rules, "post-rulebase")
-            except KeyError:
-                pass
+            for rulebase in ["pre-rulebase", "post-rulebase"]:
+                try:
+                    rules = dg[rulebase]["security"]["rules"]["entry"]
+                    rules = single_list(rules)
+                    writeblock(rules, rulebase)
+                except KeyError:
+                    pass
 
 
 def single_list(item):
