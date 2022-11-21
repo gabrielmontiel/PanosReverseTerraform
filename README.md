@@ -1,6 +1,6 @@
 # PanosReverseTerraform
 
-##How to use
+## How to use
 
 Run xml2terraform.py in the same directory as a Panorama running-config.xml file
 
