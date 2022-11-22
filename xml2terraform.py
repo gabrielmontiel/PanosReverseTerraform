@@ -81,7 +81,7 @@ def write_policy_block(dg, rulebase):
     for rule in rules:
         for key in rule.keys():
             if key in multiples:
-                rule[key]["member"] = parseMultiples(rule[key])
+                rule[key]["member"] = parseMultiples(rule[key]["member"])
 
         dg_name = dg.get("@name", "shared")
         with open(f"security_policies_{dg_name}.tf", "a") as f:
@@ -100,8 +100,8 @@ def write_group_object_block(group):
 
 
 def parseMultiples(value):
-    if isinstance(value["member"], list):
-        return '","'.join(value["member"])
+    if isinstance(value, list):
+        return '","'.join(value)
     else:
         return value
 
